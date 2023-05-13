@@ -24,22 +24,26 @@ void setup() {
 
 
 void loop(){
-  
+  # Initialisation du LCD
   lcd.setCursor(0,0);
   lcd.print("ENTR=" + String(count_entry) + "  EXIT=" + String(count_exit)); 
+  # Calcul du Total
   int tot = count_entry - count_exit;
   if (tot<=0){tot=0;}
   lcd.setCursor(0,1);
   lcd.print("TOT=");
   lcd.print(tot);
-
+  
+  # Récupération des valeurs des sensor 1 et 2 
   val1 = digitalRead(sensor1);
   val2 = digitalRead(sensor2);
 
+  # Sensor 1 trigerred
   if (val1 == HIGH && state1 == LOW) {
     digitalWrite(led, HIGH);
     Serial.println("Sensor 1 triggered");
     state1 = HIGH;
+    # Si on est déjà passé par le sensor 2 c'est une entrée
     if(first == 2){
       first = 0;
       count_entry++;
@@ -51,13 +55,15 @@ void loop(){
   } else if (val1 == LOW && state1 == HIGH) {
     state1 = LOW;
   }
-
+  
+   # Sensor 2 trigerred
   if (val2 == HIGH && state2 == LOW) {
     digitalWrite(led, HIGH);
     Serial.println("Sensor 2 triggered");
     state2 = HIGH;
   } else if (val2 == LOW && state2 == HIGH) {
     state2 = LOW;
+    # Si on est déjà passé par le sensor 1 c'est une sortie
     if (first == 1){
       first = 0;
       count_exit++;
